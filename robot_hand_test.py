@@ -1,7 +1,6 @@
 import serial
 import time
 
-# Try different COM ports to find Arduino
 possible_ports = ['COM4', 'COM5', 'COM3', 'COM6', 'COM7', 'COM8']
 arduino = None
 
@@ -18,7 +17,7 @@ for port in possible_ports:
 if arduino is None:
     print("No Arduino found. Running in simulation mode...")
     
-time.sleep(2)  # Give Arduino time to reset
+time.sleep(2)  
 
 def send_gesture(command):
     if arduino:
@@ -27,15 +26,14 @@ def send_gesture(command):
     else:
         print(f"SIMULATION - Would send command: {command}")
 
-# Test: open, close, thumbs up
 print("\nTesting robot hand gestures:")
-send_gesture('o')  # Open hand
+send_gesture('o')  
 time.sleep(2)
 
-send_gesture('c')  # Close hand
+send_gesture('c')  
 time.sleep(2)
 
-send_gesture('t')  # Thumbs up
+send_gesture('t')  
 
 if arduino:
     arduino.close()
