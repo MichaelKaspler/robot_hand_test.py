@@ -1,7 +1,7 @@
 import serial
 import time
 
-possible_ports = ['COM4', 'COM5', 'COM3', 'COM6', 'COM7', 'COM8']
+possible_ports = ['COM3', 'COM4', 'COM5', 'COM6', 'COM7', 'COM8']
 arduino = None
 
 for port in possible_ports:
