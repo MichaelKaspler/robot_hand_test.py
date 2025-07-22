@@ -35,15 +35,8 @@ void setup() {
 }
 
 void loop() {
-  //mainwork();
-  //fist();//full close
-  //thumpsup();
-  //open_hand();//full open
-  //wave();
-  //manual_control(4);
-///////////////////////void hand_control() you want to use function and only change this function dont touch any thing else 
-
   
+  hand_control();
 }
 
 void setServo(int channel, int angle) {
@@ -51,6 +44,7 @@ void setServo(int channel, int angle) {
   int pulse = map(angle, 0, 180, SERVOMIN, SERVOMAX);
   pwm.setPWM(channel, 0, pulse);
 }
+
 
 void finger4open() {
   int angle = 0;
@@ -65,6 +59,11 @@ void finger3open() {
 void finger2open() {
   int angle = 120;
   setServo(2, angle);
+}
+
+void finger1open() {
+  int angle = 0;
+  setServo(1, angle);
 }
 
 void finger0open() {
@@ -87,52 +86,85 @@ void finger2close() {
   setServo(2, angle);
 }
 
+void finger1close() {
+  int angle = 150;
+  setServo(1, angle);
+}
+
 void finger0close() {
   int angle = 0;
   setServo(0, angle);
 }
-///////////////////////////////////////////////do here keep going till you do all finger combanitions 
+
+
 void hand_control() {
   if (Serial.available()) {
     char command = Serial.read();
     Serial.print("Received command: ");
     Serial.println(command);
 
-    if (command == '6') {
-      finger4close();
-      finger3open();
-      finger2close();
-      finger0open();
-    } 
-    else if (command == '5') {
+    // Handle all finger counts from 0-5
+    if (command == '0') {
+      // Fist - all fingers closed
       finger4close();
       finger3close();
-      finger2open();
-      finger0open();
-    } 
-    else if (command == '4') {
-      finger4open();
-      finger3close();
       finger2close();
+      finger1close();
       finger0close();
+      Serial.println("Gesture: Fist (0 fingers)");
     } 
-    else if (command == '3') {
+    else if (command == '1') {
+      // One finger up (thumb)
       finger4close();
-      finger3open();
-      finger2close();
+      finger3close();
+      finger2open();  // Thumb up
+      finger1close();
       finger0close();
+      Serial.println("Gesture: Thumb up (1 finger)");
     } 
     else if (command == '2') {
+      // Two fingers up (thumb + index)
       finger4close();
       finger3close();
-      finger2open();
-      finger0close();
+      finger2open();  // Thumb
+      finger1close();
+      finger0open();  // Index
+      Serial.println("Gesture: Two fingers (2 fingers)");
     } 
-    else if (command == '0') {
+    else if (command == '3') {
+      // Three fingers up (thumb + index + middle)
       finger4close();
-      finger3close();
-      finger2close();
-      finger0open();
+      finger3open();  // Middle
+      finger2open();  // Thumb
+      finger1close();
+      finger0open();  // Index
+      Serial.println("Gesture: Three fingers (3 fingers)");
+    } 
+    else if (command == '4') {
+      // Four fingers up (all except pinky)
+      finger4close(); // Pinky closed
+      finger3open();  // Ring
+      finger2open();  // Thumb
+      finger1open();  // Middle
+      finger0open();  // Index
+      Serial.println("Gesture: Four fingers (4 fingers)");
+    } 
+    else if (command == '5') {
+      // All fingers up (open hand)
+      finger4open();  // Pinky
+      finger3open();  // Ring
+      finger2open();  // Thumb
+      finger1open();  // Middle
+      finger0open();  // Index
+      Serial.println("Gesture: Open hand (5 fingers)");
+    }
+    else if (command == 't' || command == 'T') {
+      // Test command - ignore (sent during connection test)
+      Serial.println("Test command received - Arduino connected!");
+    }
+    else {
+      Serial.print("Unknown command: ");
+      Serial.println(command);
     }
   }
 }
@@ -171,3 +203,15 @@ void wait() {
     setServo(i, angle);
   }
 }
+
+void timer(unsigned long durationMillis) {
+  unsigned long startTime = millis();
+  while (millis() - startTime < durationMillis) {
+  }
+}
+
+void mainwork() {
+}
+
+void manual_control(int finger) {
+} 
